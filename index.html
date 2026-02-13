@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Dearest Love</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            text-align: center;
+            color: white;
+            overflow: hidden; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            padding: 20px;
+            width: 90%;
+            max-width: 500px; /* Slimmed down for better mobile fit */
+            z-index: 10;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px); /* Safari support */
+            border: 1px solid rgba(255,255,255,0.3);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .letter { text-align: left; font-size: 0.95rem; }
+
+        .btn-group {
+            position: relative;
+            min-height: 150px; /* Extra space for the moving button */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            touch-action: manipulation; /* Optimizes for mobile taps */
+        }
+
+        .continue, .yes { background: white; color: #7b61ff; }
+        .no { background: #7b61ff; color: white; z-index: 100; }
+
+        /* TULIP ANIMATION */
+        .flower-wrapper {
+            position: relative;
+            width: 100%;
+            height: 140px;
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .stem {
+            width: 6px;
+            background: #4CAF50;
+            height: 0;
+            border-radius: 4px;
+            animation: growStem 2s ease-out forwards;
+        }
+
+        .bloom {
+            position: absolute;
+            bottom: 80px;
+            width: 40px;
+            height: 50px;
+            opacity: 0;
+            transform: scale(0);
+            animation: bloomTulip 1.2s 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .petal {
+            position: absolute;
+            background: #ff69b4;
+            width: 30px;
+            height: 45px;
+            border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+            left: 50%;
+            transform-origin: bottom center;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+        }
+
+        .petal:nth-child(1) { transform: translateX(-80%) rotate(-15deg); z-index: 2; }
+        .petal:nth-child(2) { transform: translateX(-20%) rotate(15deg); z-index: 2; }
+        .petal:nth-child(3) { transform: translateX(-50%) rotate(0deg) scaleY(1.1); background: #ff4da6; z-index: 1; }
+
+        @keyframes growStem { to { height: 80px; } }
+        @keyframes bloomTulip { to { opacity: 1; transform: scale(1); } }
+
+        .falling-flower {
+            position: fixed;
+            bottom: -50px;
+            user-select: none;
+            pointer-events: none;
+            animation: floatUp 6s linear forwards;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-content" class="container">
+        <div id="letter-section">
+            <div class="card letter">
+                <h2 style="text-align:center; margin-top: 0;">My Dearest Love,</h2>
+                <p>From the moment you came into my life, everything started to feel different — softer, brighter, and more meaningful. You are the calm in my chaos, the light in my darkest days, and the reason behind so many of my smiles.</p>
+                <p>I promise to choose you every single day. To support you, protect your heart, and grow with you. I want to build something beautiful with you.</p>
+                <p style="text-align: right; margin-bottom: 0;">With all my love,<br><strong>Jervie</strong></p>
+            </div>
+            <button class="continue" onclick="showQuestion()">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced move logic for mobile
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            if (!noBtn) return;
+            
+            // Keeps the button within the visible viewport with padding
+            const padding = 50;
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = Math.max(padding, x) + 'px';
+            noBtn.style.top = Math.max(padding, y) + 'px';
+        }
+
+        function showQuestion() {
+            const content = document.getElementById('main-content');
+            content.innerHTML = `
+                <h1 style="font-size: 2rem; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Can You Be My Valentine?</h1>
+                <div class="btn-group">
+                    <button class="yes" onclick="showSuccess()">Yes</button>
+                    <button class="no" id="noBtn" 
+                        onmouseover="moveButton()" 
+                        onclick="moveButton()" 
+                        ontouchstart="moveButton()">No</button>
+                </div>
+            `;
+        }
+
+        function showSuccess() {
+            const content = document.getElementById('main-content');
+            content.innerHTML = `
+                <div class="card" style="animation: fadeIn 1s ease-in">
+                    <h1 style="font-size: 1.8rem; margin-bottom: 10px;">I LOVE YOU SO MUCH!</h1>
+                    <p style="font-size: 1rem; opacity: 0.9;">You just made me the happiest person alive my love.</p>
+                    
+                    <div class="flower-wrapper">
+                        <div class="bloom">
+                            <div class="petal"></div>
+                            <div class="petal"></div>
+                            <div class="petal"></div>
+                        </div>
+                        <div class="stem"></div>
+                    </div>
+                </div>
+            `;
+            for(let i=0; i<25; i++) {
+                setTimeout(createFallingFlower, i * 200);
+            }
+        }
+
+        function createFallingFlower() {
+            const f = document.createElement("div");
+            f.classList.add("falling-flower");
+            f.innerHTML = "🌷"; 
+            f.style.left = Math.random() * 100 + "vw";
+            f.style.fontSize = (15 + Math.random() * 15) + "px";
+            f.style.animationDuration = (4 + Math.random() * 3) + "s";
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), 7000);
+        }
+
+        setInterval(createFallingFlower, 1000);
+    </script>
+</body>
+</html>
